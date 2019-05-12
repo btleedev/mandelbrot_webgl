@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css">
+<link rel="stylesheet" media="screen" type="text/css" href="css/bootstrap-slider.css">
+<style>
+	html, body {
+		margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+	}
+
+	#container {
+		position: relative;
+		background: #000;
+		width: 100%;
+		height: 100%;
+		margin: auto;
+	}
+	#controls {
+		position: absolute;
+		width: 300px;
+		height: 100px;
+		border: 2px solid rgb(255, 201, 14);
+		border-radius: 12px;
+		/*background-color: black;*/
+		top: 0;
+		right: 0;
+		margin: 10px;
+		z-index: 2;
+		color: white;
+		float: left;
+	}
+	#reset {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 10px;
+	}
+	#colorSelector {
+		position: absolute;
+		top: 0;
+		right: 70px;
+		margin: 10px;
+	}
+	#help {
+		position: absolute;
+		top: 0;
+		right: 225px;
+		margin: 10px;
+	}
+	#options {
+		position: absolute;
+		top: 0;
+		right: 141px;
+		margin: 10px;
+	}
+	.slider.slider-horizontal {
+		width: 70%;
+		margin: 0 15%;
+	}
+
+</style>
+
+</head>
+
+<body>
+	<div style="width: 100%; height: 100%; padding: 0px; margin: 0px">
+		<div id="container">
+			<button type="button" id="reset" class="btn btn-default">Reset</button>
+			<button type="button" id="colorSelector" class="btn btn-default">Color</button>
+			<button type="button" id="options" class="btn btn-default" data-toggle="modal" data-target="#optionsModal">Options</button>
+			<button type="button" id="help" class="btn btn-default" data-toggle="modal" data-target="#helpModal">Help</button>
+		</div>
+
+			<!-- Modal -->
+		<div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="myModalLabel">Options</h4>
+		      </div>
+		      <div class="modal-body">
+		        <h4>Color (Enter a value between 0-255)</h4>
+		        <div class="form-inline">
+		            <div class="form-group ">
+		                <div class="col-lg-3">
+			                <label class="sronly">Red</label> 
+			                <input type="text" id="red" class="form-control col-lg-8" style="width: 50px" placeholder="Red">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <div class="col-lg-3">
+		                	<label class="sronly">Green</label>
+		        			<input type="text" id="green" class="form-control col-lg-8" style="width: 50px" placeholder="Green">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <div class="col-lg-3">
+		                	<label class="sronly">Blue</label> 
+		        			<input type="text" id="blue" class="form-control col-lg-8" style="width: 50px" placeholder="Blue">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <div class="col-lg-3">
+		                	<label class="sronly" style="color: white">_</label>
+		        			<button type="submit" id="change_colour" class="btn btn-primary">Change</button>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <div class="col-lg-3">
+		                	<label class="sronly" style="color: white">_</label>
+		        			<button type="submit" id="revert_colour" class="btn btn-danger">Revert</button>
+		                </div>
+		            </div>
+		        </div>
+
+		        <hr>
+
+		        <h4>Zoom</h4>
+				<div class="btn-group">
+				  <button type="button" id="zoom_1x" class="btn btn-default active">1x</button>
+				  <button type="button" id="zoom_2x" class="btn btn-default">2x</button>
+				  <button type="button" id="zoom_4x" class="btn btn-default">4x</button>
+				</div>
+
+				<hr>
+
+				<h4>Iterations</h4>
+				<div class="btn-group">
+				  <button type="button" id="it_0" class="btn btn-default">5</button>
+				  <button type="button" id="it_1" class="btn btn-default">10</button>
+				  <button type="button" id="it_2" class="btn btn-default">25</button>
+				  <button type="button" id="it_3" class="btn btn-default">50</button>
+				  <button type="button" id="it_4" class="btn btn-default">100</button>
+				  <button type="button" id="it_5" class="btn btn-default">200</button>
+				  <button type="button" id="it_6" class="btn btn-default active">300</button>
+				  <button type="button" id="it_7" class="btn btn-default">400</button>
+				  <button type="button" id="it_8" class="btn btn-default">500</button>
+				  <button type="button" id="it_9" class="btn btn-default">750</button>
+				  <button type="button" id="it_10" class="btn btn-default">1000</button>
+				  <button type="button" id="it_11" class="btn btn-default">9999</button>
+				</div>
+
+				<hr>
+
+				<h4>Threshold (Percentage)</h4>
+				<input id="threshSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="70">
+
+				<hr>
+
+				<h4>Convergence Color</h4>
+				<div class="btn-group">
+				  <button type="button" id="conv_1" class="btn btn-default active">Black</button>
+				  <button type="button" id="conv_2" class="btn btn-default">White</button>
+				</div>
+
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="myModalLabel">Help</h4>
+		      </div>
+		      <div class="modal-body">
+		        Welcome to the Mandelbrot Set!
+		        <hr>
+		        <h4>Basics</h4>
+		        To move around the Mandelbrot Set, click and hold on an area inside the viewing area and move the mouse around.<br><br>
+		        To zoom on the Mandelbrot Set, scroll up to zoom in and scroll down to zoom out.<br><br>
+		        To reset back to the starting position and scale of the Mandelbrot Set, click the <b>Reset</b> button at the top right of the viewing area.<br><br>
+		        The colour option in the top right will open a colour picker. As you browse the colour picker, it will dynamically update the colour of the Mandelbrot Set.
+		        The options will let you adjust the colour of the Mandelbrot Set and the zoom speed.
+		        <hr>
+		        <h4>Why is it not infinite?</h4>
+		        Unfortunately WebGL has some issues with high-precision floating point numbers. We are currently limited to using floats so unfortunately we don't have the luxury of double-floating point numbers.
+		        <hr>
+		        <h4>Technologies</h4>
+		        <ul>
+		        	<li>JQuery</li>
+		        	<li>ThreeJS</li>
+		        	<li>WebGL</li>
+		        	<li>Bootstrap</li>
+		        </ul>
+		        <hr>
+		        That's all! Enjoy!
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	<script src="lib/jquery-2.1.1.min.js"></script>
+	<script src="js/colorpicker.js"></script>
+	<script src="js/bootstrap-slider.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="lib/threejs/build/three.min.js"></script>
+	<script src="EffectComposer.js"></script>
+	<script src="CopyShader.js"></script>
+	<script src="RenderPass.js"></script>
+	<script src="ShaderPass.js"></script>
+	<script src="MaskPass.js"></script>
+	<script src="MandelbrotShader.js"></script>
+	<script src="JuliaShader.js"></script>
+	
+	<script type="text/javascript">
+		var zoomSpeed = 0.1;
+
+		var $container = $('#container');
+
+		var WIDTH;
+		var HEIGHT;
+
+		function resizeWindow() {
+			WIDTH = $(window).width();
+		    HEIGHT = $(window).height();
+			if (scale) scale.x = WIDTH/HEIGHT * scale.y;
+		}
+		resizeWindow();
+
+/*
+		//center height
+		var tMargin = ($('body').height() - $container.height())/2;
+		console.log(tMargin);
+		if (tMargin > 0) $container.css('margin-top', tMargin);
+*/
+
+		// set some camera attributes
+		var VIEW_ANGLE = 45,
+		    ASPECT = WIDTH/HEIGHT,
+		    NEAR = 0.1,
+		    FAR = 10000;
+		
+		// create a WebGL renderer, camera
+		// and a scene
+		var renderer = new THREE.WebGLRenderer();
+		var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+
+		var scene = new THREE.Scene();
+		
+		// the camera starts at 0,0,0 so pull it back
+		camera.position.z = 300;
+		
+		// start the renderer
+		renderer.setSize(WIDTH, HEIGHT);
+		
+		// attach the render-supplied DOM element
+		$container.append(renderer.domElement);
+
+
+		composer = new THREE.EffectComposer(renderer);
+		composer.addPass(new THREE.RenderPass(scene, camera));
+		var mandShader = new THREE.ShaderPass(THREE.MandelbrotShader);
+		var scale = mandShader.uniforms.scale.value;
+		scale.x = WIDTH/HEIGHT;
+		var center = mandShader.uniforms.center.value;
+		var color = mandShader.uniforms.colour.value;
+		var threshhold = 70;
+		color.y = 0.0;
+		color.z = 0.0;
+		mandShader.enabled = true;
+		mandShader.renderToScreen = true;
+		mandShader.clear = true;
+
+		composer.addPass(mandShader);
+
+		function render() {
+			requestAnimationFrame(render);
+			composer.render();
+		}
+		render();
+
+		function project(mouse) {
+			return new THREE.Vector2(-(mouse.x-WIDTH/2)/WIDTH, (mouse.y-HEIGHT/2)/HEIGHT);
+		}
+
+
+		var mousePos = { x: 0, y: 0 };
+		$(document).mousemove(function(e) {
+			mousePos.x = e.pageX;
+			mousePos.y = e.pageY;
+		});
+
+		var mDown = false;
+		var mx = 0;
+		var my = 0;
+		$("canvas").mousedown(function(e) {
+			mDown = true;
+			mx = (e.offsetX == undefined) ? e.originalEvent.layerX : e.offsetX;
+			my = (e.offsetY == undefined) ? e.originalEvent.layerY : e.offsetY;
+        })
+
+		$("canvas").mousemove(function(e) {
+			if (!mDown) return;
+            var offX = (e.offsetX == undefined) ? e.originalEvent.layerX : e.offsetX;
+            var offY = (e.offsetY == undefined) ? e.originalEvent.layerY : e.offsetY;
+			var dx = mx - offX;
+			var dy = offY - my;
+
+			mandShader.uniforms.center.value.x -= scale.x * 2 * dx / (WIDTH);
+			mandShader.uniforms.center.value.y -= scale.y * 2 * dy / (HEIGHT);
+
+			mx = offX;
+			my = offY;
+			//renderer.clear();
+		});
+
+		$("canvas").mouseup(function(e) {
+			mDown = false;
+		});
+
+		//zoom
+		$("canvas").bind('mousewheel', function(e) {
+			//up
+        	if(e.originalEvent.wheelDelta /120 > 0) {
+				scale.x /= 1.0 + zoomSpeed;
+				scale.y /= 1.0 + zoomSpeed;
+        	} else {
+				scale.x *= 1.0 + zoomSpeed;
+				scale.y *= 1.0 + zoomSpeed;
+        	}
+        	//mandShader.uniforms.center.value = project(mousePos);
+			//renderer.clear();
+		});
+        //firefox
+		$("canvas").bind('wheel mousewheel', function(e) {
+			//up
+        	if(e.originalEvent.deltaY /120 > 0) {
+				scale.x *= 1.0 + zoomSpeed;
+				scale.y *= 1.0 + zoomSpeed;
+        	} else {
+				scale.x /= 1.0 + zoomSpeed;
+				scale.y /= 1.0 + zoomSpeed;
+        	}
+        	//mandShader.uniforms.center.value = project(mousePos);
+			//renderer.clear();
+		});
+
+		$("#reset").click(function(e) {
+			scale.x = WIDTH/HEIGHT;
+			scale.y = 1.0;
+			mandShader.uniforms.center.value.x = 0.5;
+			mandShader.uniforms.center.value.y = 0.0;
+		});
+
+		window.addEventListener('resize', onWindowResize, false);
+		function onWindowResize() {
+			resizeWindow();
+			camera.aspect = WIDTH/HEIGHT;
+		    camera.updateProjectionMatrix();
+
+		    renderer.setSize(WIDTH, HEIGHT);
+		    composer.setSize(WIDTH, HEIGHT);
+		}
+
+		function updateGUIColors() {
+			$("#red").val(color.x*255);
+			$("#green").val(color.y*255);
+			$("#blue").val(color.z*255);
+		}
+		updateGUIColors();
+
+		function updateColors() {
+			var r = $("#red").val();
+			var g = $("#green").val();
+			var b = $("#blue").val();
+			if (r.match(/[^\d]/) || g.match(/[^\d]/) || b.match(/[^\d]/)) {
+				//error
+				console.log("err");
+			} else {
+				r = (r > 255) ? 255 : r;
+				g = (g > 255) ? 255 : g;
+				b = (b > 255) ? 255 : b;
+				color.x = r/255;
+				color.y = g/255;
+				color.z = b/255;
+				updateGUIColors();
+			}
+		}
+		$("#change_colour").click(updateColors);
+		$("#revert_colour").click(updateGUIColors);
+
+
+		$('#colorSelector').ColorPicker({
+			color: '#FF0000',
+			onShow: function (colpkr) {
+				if (!$(colpkr).is(":visible"))$(colpkr).fadeIn(500);
+				return false;
+			},
+			onHide: function (colpkr) {
+				$(colpkr).fadeOut(500);
+				return false;
+			},
+			onChange: function (hsb, hex, rgb) {
+				$("#red").val(rgb.r);
+				$("#green").val(rgb.g);
+				$("#blue").val(rgb.b);
+				updateColors();
+
+				$('#colorSelector div').css('backgroundColor', '#' + hex);
+			}
+		});
+
+		function updateGUIZoom(id) {
+			$("#zoom_1x").removeClass("active");
+			$("#zoom_2x").removeClass("active");
+			$("#zoom_4x").removeClass("active");
+			if (id == 0) $("#zoom_1x").addClass("active");
+			if (id == 1) $("#zoom_2x").addClass("active");
+			if (id == 2) $("#zoom_4x").addClass("active");
+		}
+
+		function updateZoom(id) {
+			if (id == 0) zoomSpeed = 0.1;
+			if (id == 1) zoomSpeed = 0.2;
+			if (id == 2) zoomSpeed = 0.4;
+			updateGUIZoom(id);
+		}
+		$("#zoom_1x").click(function(e) { updateZoom(0) });
+		$("#zoom_2x").click(function(e) { updateZoom(1) });
+		$("#zoom_4x").click(function(e) { updateZoom(2) });
+
+		function updateGUIIterations(id) {
+			for (var i = 0; i <= 12; i++) {
+				$("#it_"+i).removeClass("active");
+				if (i == id) $("#it_"+i).addClass("active");
+			}
+		}
+
+		function updateIterations(id) {
+			var n;
+			if (id == 0) n = 5;
+			if (id == 1) n = 10;
+			if (id == 2) n = 25;
+			if (id == 3) n = 50;
+			if (id == 4) n = 100;
+			if (id == 5) n = 200;
+			if (id == 6) n = 300;
+			if (id == 7) n = 400;
+			if (id == 8) n = 500;
+			if (id == 9) n = 750;
+			if (id == 10) n = 1000;
+			if (id == 11) n = 9999;
+			mandShader.uniforms.iterations.value = n;
+			updateThreshold(threshhold);
+			updateGUIIterations(id);
+		}
+		$("#it_0").click(function(e) { updateIterations(0) });
+		$("#it_1").click(function(e) { updateIterations(1) });
+		$("#it_2").click(function(e) { updateIterations(2) });
+		$("#it_3").click(function(e) { updateIterations(3) });
+		$("#it_4").click(function(e) { updateIterations(4) });
+		$("#it_5").click(function(e) { updateIterations(5) });
+		$("#it_6").click(function(e) { updateIterations(6) });
+		$("#it_7").click(function(e) { updateIterations(7) });
+		$("#it_8").click(function(e) { updateIterations(8) });
+		$("#it_9").click(function(e) { updateIterations(9) });
+		$("#it_10").click(function(e) { updateIterations(10) });
+		$("#it_11").click(function(e) { updateIterations(11) });
+		$("#it_12").click(function(e) { updateIterations(12) });
+
+		$("#threshSlider").slider();
+		$("#threshSlider").on('slide', function(e) {
+			updateThreshold(e.value);
+		});
+
+		function updateThreshold(percent) {
+			mandShader.uniforms.threshhold.value = Math.floor(mandShader.uniforms.iterations.value*percent/100); 
+			threshhold = percent;
+		}
+
+		function updateGUIConvergence(id) {
+			for (var i = 1; i <= 2; i++) {
+				$("#conv_"+i).removeClass('active');
+				if (i == id) $("#conv_"+i).addClass('active');
+			}
+		}
+		function updateConvergence(id) {
+			mandShader.uniforms.convergence.value = (id == 1) ? 0.0 : 1.0;
+			updateGUIConvergence(id);
+		}
+		$("#conv_1").click(function(e) { updateConvergence(1) });
+		$("#conv_2").click(function(e) { updateConvergence(2) });
+	</script>
+
+	</div>
+
+</body>
+
+</html>
